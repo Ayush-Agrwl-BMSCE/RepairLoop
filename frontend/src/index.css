@@ -1,0 +1,86 @@
+/* Global Reset & Theme Tokens */
+:root {
+  /* Forest Green & Nature Palette */
+  --color-primary-dark: #1b4332;
+  --color-primary: #2d6a4f;
+  --color-primary-medium: #40916c;
+  --color-primary-light: #52b788;
+  --color-primary-subtle: #d8f3dc;
+  --color-primary-ghost: #f2fbf5;
+
+  /* Surfaces & Backgrounds */
+  --color-bg: #f5f7f6;
+  --color-surface: #ffffff;
+  --color-surface-hover: #f9fbf9;
+
+  /* Borders & Dividers */
+  --color-border: #e3eae5;
+  --color-border-light: #edf2ef;
+
+  /* Text Colors */
+  --color-text-main: #182820;
+  --color-text-muted: #4e6b5e;
+  --color-text-light: #839d91;
+
+  /* Accent & Status Colors */
+  --color-amber-bg: #fffbeb;
+  --color-amber-text: #b45309;
+  --color-blue-bg: #eff6ff;
+  --color-blue-text: #1d4ed8;
+
+  /* Shadows */
+  --shadow-xs: 0 1px 2px rgba(27, 67, 50, 0.04);
+  --shadow-sm: 0 2px 4px rgba(27, 67, 50, 0.06);
+  --shadow-md: 0 4px 12px rgba(27, 67, 50, 0.08);
+  --shadow-lg: 0 10px 24px rgba(27, 67, 50, 0.1);
+
+  /* Layout Dimensions */
+  --sidebar-width: 260px;
+  --topbar-height: 70px;
+  --border-radius: 10px;
+  --border-radius-sm: 6px;
+  --border-radius-lg: 14px;
+
+  /* Typography */
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-bg);
+  color: var(--color-text-main);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+}
+
+input {
+  font-family: inherit;
+}
