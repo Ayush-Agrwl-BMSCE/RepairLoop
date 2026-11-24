@@ -166,11 +166,15 @@ flowchart TD
 
     subgraph InspectionTool ["Database GUI"]
         Compass["MongoDB Compass (Inspection Tool)"]
-        Compass -.-> MongoDB
     end
 
-    UI <-->|HTTP Requests (JSON)| Routes
-    PyMongoClient <-->|Database Connection| MongoDB
+    UI -->|HTTP Requests (JSON)| Routes
+    Routes -->|JSON Responses| UI
+
+    PyMongoClient -->|Database Queries & Commands| MongoDB
+    MongoDB -->|Query Results| PyMongoClient
+
+    Compass -.->|Database Inspection| MongoDB
 ```
 
 ### Data Flow Explanation
