@@ -168,10 +168,10 @@ flowchart TD
         Compass["MongoDB Compass (Inspection Tool)"]
     end
 
-    UI -->|HTTP Requests (JSON)| Routes
-    Routes -->|JSON Responses| UI
+    UI -->|HTTP JSON Request| Routes
+    Routes -->|JSON Response| UI
 
-    PyMongoClient -->|Database Queries & Commands| MongoDB
+    PyMongoClient -->|Database Operations| MongoDB
     MongoDB -->|Query Results| PyMongoClient
 
     Compass -.->|Database Inspection| MongoDB
