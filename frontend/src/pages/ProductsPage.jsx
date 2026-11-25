@@ -1,20 +1,32 @@
 import { useState, useMemo } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { Plus, Info } from 'lucide-react'
 import ProductStats from '../components/products/ProductStats'
 import ProductFilters from '../components/products/ProductFilters'
 import ProductTable from '../components/products/ProductTable'
 import ProductForm from '../components/products/ProductForm'
 import ProductDetails from '../components/products/ProductDetails'
-import { initialProducts } from '../data/productsData'
+import { useData } from '../context/DataContext'
 
 export default function ProductsPage() {
-  // Local state holding the list of registered demonstration products
-  const [products, setProducts] = useState(initialProducts)
+  const [searchParams, setSearchParams] = useSearchParams()
 
-  // Search & Filter State
-  const [searchTerm, setSearchTerm] = useState('')
+  // Shared data context holding products registry
+  const { products, addProduct, updateProduct, deleteProduct } = useData()
+
+  // Search & Filter State (synced with URL search param)
+  const urlSearch = searchParams.get('search') || ''
+  const [prevUrlSearch, setPrevUrlSearch] = useState(urlSearch)
+  const [searchTerm, setSearchTerm] = useState(urlSearch)
   const [categoryFilter, setCategoryFilter] = useState('')
   const [statusFilter, setStatusFilter] = useState('')
+  const [sortOrder, setSortOrder] = useState('date-desc')
+
+  // Adjust state during render when URL query param changes
+  if (urlSearch !== prevUrlSearch) {
+    setPrevUrlSearch(urlSearch)
+    setSearchTerm(urlSearch)
+  }
 
   // Modal State
   const [isFormOpen, setIsFormOpen] = useState(false)
@@ -22,33 +34,49 @@ export default function ProductsPage() {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false)
   const [selectedProduct, setSelectedProduct] = useState(null)
 
-  // Filtered products list based on search term, category, and status
+  // Filtered and sorted products list
   const filteredProducts = useMemo(() => {
-    return products.filter((product) => {
-      // 1. Search filter: serial_number, brand, model
-      const query = searchTerm.trim().toLowerCase()
-      const matchesSearch =
-        query === '' ||
-        product.serial_number.toLowerCase().includes(query) ||
-        product.brand.toLowerCase().includes(query) ||
-        product.model.toLowerCase().includes(query)
+    return products
+      .filter((product) => {
+        // 1. Search filter: serial_number, brand, model
+        const query = searchTerm.trim().toLowerCase()
+        const matchesSearch =
+          query === '' ||
+          product.serial_number.toLowerCase().includes(query) ||
+          product.brand.toLowerCase().includes(query) ||
+          product.model.toLowerCase().includes(query)
 
-      // 2. Category filter
-      const matchesCategory = categoryFilter === '' || product.category === categoryFilter
+        // 2. Category filter
+        const matchesCategory = categoryFilter === '' || product.category === categoryFilter
 
-      // 3. Status filter
-      const matchesStatus = statusFilter === '' || product.current_status === statusFilter
+        // 3. Status filter
+        const matchesStatus = statusFilter === '' || product.current_status === statusFilter
 
-      return matchesSearch && matchesCategory && matchesStatus
-    })
-  }, [products, searchTerm, categoryFilter, statusFilter])
+        return matchesSearch && matchesCategory && matchesStatus
+      })
+      .sort((a, b) => {
+        if (sortOrder === 'date-desc') {
+          return new Date(b.purchase_date) - new Date(a.purchase_date)
+        }
+        if (sortOrder === 'date-asc') {
+          return new Date(a.purchase_date) - new Date(b.purchase_date)
+        }
+        if (sortOrder === 'brand-asc') {
+          return `${a.brand} ${a.model}`.localeCompare(`${b.brand} ${b.model}`)
+        }
+        if (sortOrder === 'serial-asc') {
+          return a.serial_number.localeCompare(b.serial_number)
+        }
+        return 0
+      })
+  }, [products, searchTerm, categoryFilter, statusFilter, sortOrder])
 
   // Existing serial numbers for validation
   const existingSerials = useMemo(() => {
     return products.map((p) => p.serial_number)
   }, [products])
 
-  // Handlers for Add and Edit
+  // Handlers for Add, Edit, and Delete
   const handleOpenAddForm = () => {
     setEditingProduct(null)
     setIsFormOpen(true)
@@ -64,19 +92,26 @@ export default function ProductsPage() {
     setIsDetailsOpen(true)
   }
 
+  const handleDeleteProduct = (product) => {
+    const confirmed = window.confirm(
+      `Are you sure you want to delete ${product.brand} ${product.model} (SN: ${product.serial_number})? This action removes it from the local products registry.`
+    )
+    if (confirmed) {
+      deleteProduct(product)
+      if (selectedProduct && selectedProduct._id === product._id) {
+        setIsDetailsOpen(false)
+        setSelectedProduct(null)
+      }
+    }
+  }
+
   const handleSaveProduct = (productPayload) => {
     if (editingProduct) {
       // Update existing product
-      setProducts((prev) =>
-        prev.map((item) =>
-          item._id === productPayload._id || item.serial_number === editingProduct.serial_number
-            ? productPayload
-            : item
-        )
-      )
+      updateProduct(productPayload)
     } else {
       // Add new product
-      setProducts((prev) => [productPayload, ...prev])
+      addProduct(productPayload)
     }
   }
 
@@ -84,6 +119,8 @@ export default function ProductsPage() {
     setSearchTerm('')
     setCategoryFilter('')
     setStatusFilter('')
+    setSortOrder('date-desc')
+    setSearchParams({})
   }
 
   return (
@@ -133,6 +170,8 @@ export default function ProductsPage() {
         onCategoryChange={setCategoryFilter}
         statusFilter={statusFilter}
         onStatusChange={setStatusFilter}
+        sortOrder={sortOrder}
+        onSortChange={setSortOrder}
         onResetFilters={handleResetFilters}
         totalCount={products.length}
         filteredCount={filteredProducts.length}
@@ -143,6 +182,7 @@ export default function ProductsPage() {
         products={filteredProducts}
         onViewDetails={handleOpenDetails}
         onEdit={handleOpenEditForm}
+        onDelete={handleDeleteProduct}
         onResetFilters={handleResetFilters}
       />
 

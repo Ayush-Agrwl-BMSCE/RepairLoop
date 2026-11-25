@@ -1,8 +1,12 @@
-import { useLocation } from 'react-router-dom'
-import { Search, Bell, User, Menu } from 'lucide-react'
+import { useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { Search, Bell, User, Menu, X } from 'lucide-react'
 
 export default function Topbar({ onToggleMobileMenu }) {
   const location = useLocation()
+  const navigate = useNavigate()
+  const [globalSearch, setGlobalSearch] = useState('')
+  const [notificationMsg, setNotificationMsg] = useState(null)
 
   const getPageMeta = (pathname) => {
     switch (pathname) {
@@ -23,6 +27,21 @@ export default function Topbar({ onToggleMobileMenu }) {
   }
 
   const { title, breadcrumb } = getPageMeta(location.pathname)
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault()
+    const trimmed = globalSearch.trim()
+    if (trimmed) {
+      navigate(`/products?search=${encodeURIComponent(trimmed)}`)
+    }
+  }
+
+  const handleNotificationClick = () => {
+    setNotificationMsg('No unread alerts (Live notification service connects in backend phase).')
+    setTimeout(() => {
+      setNotificationMsg(null)
+    }, 3500)
+  }
 
   return (
     <header className="topbar">
@@ -45,29 +64,48 @@ export default function Topbar({ onToggleMobileMenu }) {
 
       {/* Right Area: Search Field, Notification, User Profile */}
       <div className="topbar-right">
-        <div className="search-field-wrapper">
+        <form className="search-field-wrapper" onSubmit={handleSearchSubmit} role="search">
           <Search className="search-icon" size={17} />
           <input
             type="text"
             className="search-input"
             placeholder="Search products, serials..."
-            aria-label="Search"
-            readOnly
+            aria-label="Global product search"
+            value={globalSearch}
+            onChange={(e) => setGlobalSearch(e.target.value)}
           />
-        </div>
+          {globalSearch && (
+            <button
+              type="button"
+              className="topbar-search-clear"
+              onClick={() => setGlobalSearch('')}
+              aria-label="Clear search input"
+            >
+              <X size={14} />
+            </button>
+          )}
+        </form>
 
         <div className="topbar-actions">
-          <button
-            type="button"
-            className="notification-btn"
-            aria-label="Notifications"
-            title="Notifications (0 unread)"
-          >
-            <Bell size={18} />
-            <span className="notification-dot" />
-          </button>
+          <div style={{ position: 'relative' }}>
+            <button
+              type="button"
+              className="notification-btn"
+              aria-label="Notifications"
+              title="Notifications (Backend integration placeholder)"
+              onClick={handleNotificationClick}
+            >
+              <Bell size={18} />
+              <span className="notification-dot" />
+            </button>
+            {notificationMsg && (
+              <div className="notification-toast">
+                {notificationMsg}
+              </div>
+            )}
+          </div>
 
-          <div className="user-profile">
+          <div className="user-profile" title="Current session operator (Authentication integration planned for backend phase)">
             <div className="user-avatar" title="Admin Technician">
               <User size={16} />
             </div>

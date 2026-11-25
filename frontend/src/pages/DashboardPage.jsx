@@ -13,13 +13,7 @@ import RepairActivityChart from '../components/dashboard/RepairActivityChart'
 import ComponentUsageChart from '../components/dashboard/ComponentUsageChart'
 import LifecycleChart from '../components/dashboard/LifecycleChart'
 import RecentRepairsTable from '../components/dashboard/RecentRepairsTable'
-import {
-  kpiMetrics,
-  monthlyRepairActivity,
-  componentReplacementStats,
-  productStatusDistribution,
-  recentRepairs,
-} from '../data/dashboardData'
+import { useData } from '../context/DataContext'
 
 const iconMap = {
   Package,
@@ -29,6 +23,14 @@ const iconMap = {
 }
 
 export default function DashboardPage() {
+  const {
+    dashboardKpis,
+    dashboardMonthlyRepairActivity,
+    dashboardComponentReplacementStats,
+    dashboardProductStatusDistribution,
+    dashboardRecentRepairs,
+  } = useData()
+
   return (
     <div className="page-container">
       {/* 1. Dashboard Header with DEMO DATA Badge */}
@@ -57,7 +59,7 @@ export default function DashboardPage() {
 
       {/* 2. Responsive KPI Cards Grid */}
       <div className="metrics-grid">
-        {kpiMetrics.map((kpi) => {
+        {dashboardKpis.map((kpi) => {
           const Icon = iconMap[kpi.iconName] || Package
           return (
             <StatCard
@@ -74,13 +76,13 @@ export default function DashboardPage() {
 
       {/* 3 & 4. Primary Charts Row: Monthly Repair Activity & Frequently Replaced Components */}
       <div className="charts-grid-two">
-        <RepairActivityChart data={monthlyRepairActivity} />
-        <ComponentUsageChart data={componentReplacementStats} />
+        <RepairActivityChart data={dashboardMonthlyRepairActivity} />
+        <ComponentUsageChart data={dashboardComponentReplacementStats} />
       </div>
 
       {/* 5. Secondary Row: Product Lifecycle Distribution & MongoDB Schema Mapping */}
       <div className="charts-grid-two">
-        <LifecycleChart data={productStatusDistribution} />
+        <LifecycleChart data={dashboardProductStatusDistribution} />
 
         <div className="chart-card schema-reference-card">
           <div className="chart-card-header">
@@ -134,7 +136,7 @@ export default function DashboardPage() {
       </div>
 
       {/* 6. Recent Repair Activities Table */}
-      <RecentRepairsTable repairs={recentRepairs} />
+      <RecentRepairsTable repairs={dashboardRecentRepairs} />
     </div>
   )
 }

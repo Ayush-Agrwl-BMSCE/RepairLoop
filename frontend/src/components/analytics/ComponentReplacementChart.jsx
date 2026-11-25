@@ -59,9 +59,10 @@ export default function ComponentReplacementChart({ data = [] }) {
                 allowDecimals={false}
               />
               <Tooltip
+                cursor={{ fill: 'rgba(45, 106, 79, 0.05)', radius: 4 }}
                 contentStyle={{
                   backgroundColor: '#ffffff',
-                  border: '1px solid #e3eae5',
+                  border: '1px solid #cbd9cf',
                   borderRadius: '8px',
                   fontSize: '0.82rem',
                   boxShadow: '0 4px 12px rgba(27, 67, 50, 0.08)',

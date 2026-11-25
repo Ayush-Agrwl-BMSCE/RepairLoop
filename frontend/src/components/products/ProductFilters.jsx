@@ -1,4 +1,4 @@
-import { Search, X, Filter } from 'lucide-react'
+import { Search, X, RotateCcw } from 'lucide-react'
 import { productCategories, productStatuses } from '../../data/productsData'
 
 export default function ProductFilters({
@@ -8,11 +8,17 @@ export default function ProductFilters({
   onCategoryChange,
   statusFilter,
   onStatusChange,
+  sortOrder = 'date-desc',
+  onSortChange,
   onResetFilters,
   totalCount,
   filteredCount,
 }) {
-  const hasActiveFilters = searchTerm !== '' || categoryFilter !== '' || statusFilter !== ''
+  const hasActiveFilters =
+    searchTerm.trim() !== '' ||
+    categoryFilter !== '' ||
+    statusFilter !== '' ||
+    sortOrder !== 'date-desc'
 
   return (
     <div className="product-filters-bar">
@@ -74,6 +80,23 @@ export default function ProductFilters({
           </select>
         </div>
 
+        {/* Sort Order Dropdown */}
+        {onSortChange && (
+          <div className="filter-select-wrapper">
+            <select
+              className="filter-select"
+              value={sortOrder}
+              onChange={(e) => onSortChange(e.target.value)}
+              aria-label="Sort products"
+            >
+              <option value="date-desc">Newest First (Purchase)</option>
+              <option value="date-asc">Oldest First (Purchase)</option>
+              <option value="brand-asc">Brand &amp; Model (A &ndash; Z)</option>
+              <option value="serial-asc">Serial Number (A &ndash; Z)</option>
+            </select>
+          </div>
+        )}
+
         {/* Reset Filters Button */}
         {hasActiveFilters && (
           <button
@@ -82,7 +105,7 @@ export default function ProductFilters({
             onClick={onResetFilters}
             title="Reset all search and filter fields"
           >
-            <Filter size={14} />
+            <RotateCcw size={14} />
             <span>Reset Filters</span>
           </button>
         )}

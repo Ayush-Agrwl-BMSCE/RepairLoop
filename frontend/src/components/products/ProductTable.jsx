@@ -1,6 +1,6 @@
-import { Eye, Edit3, SearchX, RotateCcw } from 'lucide-react'
+import { Eye, Edit3, Trash2, SearchX, RotateCcw } from 'lucide-react'
 
-export default function ProductTable({ products, onViewDetails, onEdit, onResetFilters }) {
+export default function ProductTable({ products, onViewDetails, onEdit, onDelete, onResetFilters }) {
   const formatDate = (dateString) => {
     if (!dateString) return '—'
     try {
@@ -64,11 +64,11 @@ export default function ProductTable({ products, onViewDetails, onEdit, onResetF
         <table className="dashboard-table product-list-table">
           <thead>
             <tr>
-              <th>Product</th>
-              <th>Serial Number</th>
-              <th>Category</th>
-              <th>Purchase Date</th>
-              <th>Current Status</th>
+              <th className="th-product">Product</th>
+              <th className="th-serial">Serial Number</th>
+              <th className="th-category">Category</th>
+              <th className="th-date">Purchase Date</th>
+              <th className="th-status">Current Status</th>
               <th className="th-actions">Actions</th>
             </tr>
           </thead>
@@ -117,6 +117,17 @@ export default function ProductTable({ products, onViewDetails, onEdit, onResetF
                     >
                       <Edit3 size={16} />
                     </button>
+                    {onDelete && (
+                      <button
+                        type="button"
+                        className="btn-action-icon btn-delete"
+                        onClick={() => onDelete(product)}
+                        title={`Delete ${product.brand} ${product.model}`}
+                        aria-label="Delete Product"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    )}
                   </div>
                 </td>
               </tr>

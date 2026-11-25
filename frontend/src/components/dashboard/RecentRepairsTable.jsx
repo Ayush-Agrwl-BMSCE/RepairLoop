@@ -47,16 +47,16 @@ export default function RecentRepairsTable({ repairs }) {
       </div>
 
       <div className="table-responsive">
-        <table className="dashboard-table">
+        <table className="dashboard-table recent-repairs-table">
           <thead>
             <tr>
-              <th>Ticket ID</th>
-              <th>Product</th>
-              <th>Category</th>
-              <th>Fault Description</th>
-              <th>Repair Date</th>
-              <th>Repair Cost</th>
-              <th>Outcome</th>
+              <th className="th-ticket">Ticket ID</th>
+              <th className="th-product">Product</th>
+              <th className="th-category">Category</th>
+              <th className="th-fault">Fault Description</th>
+              <th className="th-date">Repair Date</th>
+              <th className="th-cost">Repair Cost</th>
+              <th className="th-outcome">Outcome</th>
             </tr>
           </thead>
           <tbody>

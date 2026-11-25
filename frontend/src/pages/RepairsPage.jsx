@@ -5,24 +5,11 @@ import RepairFilters from '../components/repairs/RepairFilters'
 import RepairTable from '../components/repairs/RepairTable'
 import RepairForm from '../components/repairs/RepairForm'
 import RepairDetails from '../components/repairs/RepairDetails'
-import { initialRepairs } from '../data/repairsData'
-import { initialProducts } from '../data/productsData'
+import { useData } from '../context/DataContext'
 
 export default function RepairsPage() {
-  // Local state holding the list of demonstration repair records
-  const [repairs, setRepairs] = useState(initialRepairs)
-
-  // Products reference list for lookup and selection
-  const products = initialProducts
-
-  // Map of products by _id for fast normalized lookup
-  const productsMap = useMemo(() => {
-    const map = {}
-    products.forEach((p) => {
-      map[p._id] = p
-    })
-    return map
-  }, [products])
+  // Shared data context holding repairs and products registry
+  const { repairs, products, productsMap, addRepair } = useData()
 
   // Search & Filter State
   const [searchTerm, setSearchTerm] = useState('')
@@ -95,8 +82,8 @@ export default function RepairsPage() {
   }
 
   const handleSaveRepair = (newRepairPayload) => {
-    // Add new repair to state (prepended to display at top)
-    setRepairs((prev) => [newRepairPayload, ...prev])
+    // Add new repair to shared state (prepended to display at top)
+    addRepair(newRepairPayload)
   }
 
   const handleResetFilters = () => {

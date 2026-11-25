@@ -11,16 +11,18 @@
   /* Surfaces & Backgrounds */
   --color-bg: #f5f7f6;
   --color-surface: #ffffff;
-  --color-surface-hover: #f9fbf9;
+  --color-surface-hover: #f7faf8;
+  --color-surface-muted: #f4f8f5;
 
   /* Borders & Dividers */
-  --color-border: #e3eae5;
-  --color-border-light: #edf2ef;
+  --color-border: #d2ded5;
+  --color-border-light: #dde7df;
+  --color-border-divider: #e5ede7;
 
   /* Text Colors */
   --color-text-main: #182820;
   --color-text-muted: #4e6b5e;
-  --color-text-light: #839d91;
+  --color-text-light: #6e8a7c;
 
   /* Accent & Status Colors */
   --color-amber-bg: #fffbeb;
@@ -28,11 +30,12 @@
   --color-blue-bg: #eff6ff;
   --color-blue-text: #1d4ed8;
 
-  /* Shadows */
-  --shadow-xs: 0 1px 2px rgba(27, 67, 50, 0.04);
-  --shadow-sm: 0 2px 4px rgba(27, 67, 50, 0.06);
-  --shadow-md: 0 4px 12px rgba(27, 67, 50, 0.08);
-  --shadow-lg: 0 10px 24px rgba(27, 67, 50, 0.1);
+  /* Shadows - Layered Elevation System */
+  --shadow-xs: 0 1px 2px rgba(18, 48, 35, 0.04);
+  --shadow-sm: 0 1px 3px rgba(18, 48, 35, 0.04), 0 4px 12px rgba(18, 48, 35, 0.06);
+  --shadow-md: 0 1px 3px rgba(18, 48, 35, 0.04), 0 6px 20px rgba(18, 48, 35, 0.07);
+  --shadow-lg: 0 2px 6px rgba(18, 48, 35, 0.06), 0 12px 28px rgba(18, 48, 35, 0.12);
+  --shadow-modal: 0 24px 54px rgba(14, 38, 27, 0.25);
 
   /* Layout Dimensions */
   --sidebar-width: 260px;

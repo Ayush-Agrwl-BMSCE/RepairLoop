@@ -10,9 +10,7 @@ import LifecycleEventsChart from '../components/analytics/LifecycleEventsChart'
 import ProductCategoryChart from '../components/analytics/ProductCategoryChart'
 import AggregationConcepts from '../components/analytics/AggregationConcepts'
 
-import { initialProducts } from '../data/productsData'
-import { initialRepairs } from '../data/repairsData'
-import { initialLifecycleEvents } from '../data/lifecycleData'
+import { useData } from '../context/DataContext'
 
 import {
   calculateAnalyticsKPIs,
@@ -25,19 +23,13 @@ import {
 } from '../data/analyticsData'
 
 export default function AnalyticsPage() {
-  // Master demonstration datasets
-  const allProducts = initialProducts
-  const allRepairs = initialRepairs
-  const allEvents = initialLifecycleEvents
-
-  // Fast product reference map
-  const productsMap = useMemo(() => {
-    const map = {}
-    allProducts.forEach((p) => {
-      map[p._id] = p
-    })
-    return map
-  }, [allProducts])
+  // Shared demonstration datasets from unified DataContext
+  const {
+    products: allProducts,
+    repairs: allRepairs,
+    lifecycleEvents: allEvents,
+    productsMap,
+  } = useData()
 
   // Filter State
   const [categoryFilter, setCategoryFilter] = useState('')

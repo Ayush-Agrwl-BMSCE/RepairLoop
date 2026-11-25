@@ -6,24 +6,11 @@ import LifecycleTable from '../components/lifecycle/LifecycleTable'
 import LifecycleTimeline from '../components/lifecycle/LifecycleTimeline'
 import LifecycleForm from '../components/lifecycle/LifecycleForm'
 import ProductLifecycleDetails from '../components/lifecycle/ProductLifecycleDetails'
-import { initialLifecycleEvents } from '../data/lifecycleData'
-import { initialProducts } from '../data/productsData'
+import { useData } from '../context/DataContext'
 
 export default function LifecyclePage() {
-  // Local state holding the list of demonstration lifecycle events
-  const [events, setEvents] = useState(initialLifecycleEvents)
-
-  // Products reference list for lookup and selection
-  const products = initialProducts
-
-  // Map of products by _id for fast normalized lookup
-  const productsMap = useMemo(() => {
-    const map = {}
-    products.forEach((p) => {
-      map[p._id] = p
-    })
-    return map
-  }, [products])
+  // Shared data context holding lifecycle events and products registry
+  const { lifecycleEvents: events, products, productsMap, addLifecycleEvent } = useData()
 
   // Selected product for the on-page Interactive Timeline viewer
   const [selectedProductId, setSelectedProductId] = useState(
@@ -97,8 +84,8 @@ export default function LifecyclePage() {
   }
 
   const handleSaveEvent = (newEventPayload) => {
-    // Add new event to state (prepended to display at top of table)
-    setEvents((prev) => [newEventPayload, ...prev])
+    // Add new event to shared state (prepended to display at top of table)
+    addLifecycleEvent(newEventPayload)
     // Also auto-select this product for the timeline viewer so the user immediately sees it
     setSelectedProductId(newEventPayload.product_id)
   }
